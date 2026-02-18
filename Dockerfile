@@ -1,8 +1,10 @@
 FROM docker.io/postgres:16.9 AS build
+ARG RUST_VERSION=1.82.0
 RUN apt-get update; apt-get upgrade -y
 RUN apt-get install -y clang llvm-dev curl postgresql-server-dev-16
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup install $RUST_VERSION
 RUN mkdir /work
 COPY Cargo.toml Cargo.lock install.sh README.md build.rs wrapper.h /work/
 COPY src/ /work/src/
