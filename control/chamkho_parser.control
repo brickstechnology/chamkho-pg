@@ -1,4 +1,4 @@
 comment = 'a Chamkho parser for full text search'
-default_version = '0.2.0'
+default_version = '0.3.0'
 module_pathname = '$libdir/chamkho_parser'
 relocatable = true
