@@ -376,14 +376,27 @@ fn pg_finfo_chamkho_parser_end() -> &'static sys::Pg_finfo_record {
     &sys::Pg_finfo_record { api_version: 1 }
 }
 
+fn get_runtime_share_dir() -> String {
+    unsafe {
+        let mut share_path: [c_char; 1024] = [0; 1024];
+        sys::get_share_path(
+            sys::my_exec_path.as_ptr(),
+            share_path.as_mut_ptr(),
+        );
+        std::ffi::CStr::from_ptr(share_path.as_ptr())
+            .to_string_lossy()
+            .into_owned()
+    }
+}
+
 lazy_static! {
-    static ref WORDCUT: Wordcut = Wordcut::new(
-        wordcut_engine::load_dict(Path::new(concat!(
-            env!("PG_SHARE_DIR"),
-            "/tsearch_data/chamkho_dict.txt"
-        )))
-        .unwrap()
-    );
+    static ref WORDCUT: Wordcut = {
+        let share_dir = get_runtime_share_dir();
+        let dict_path = format!("{}/tsearch_data/chamkho_dict.txt", share_dir);
+        Wordcut::new(
+            wordcut_engine::load_dict(Path::new(&dict_path)).unwrap()
+        )
+    };
     static ref SPACE_RE: Regex = Regex::new(r"[\s\t\r\n]").unwrap();
 }
 
@@ -430,7 +443,7 @@ fn chamkho_parser_get_token(func_call_info: sys::FunctionCallInfo) -> sys::Datum
             (*ctx).is_segmented = false;
             0
         } else {
-            let r = &((*ctx).text_ranges[(*ctx).word_idx]);
+            let r = &((&(*ctx).text_ranges)[(*ctx).word_idx]);
             let len = (r.e - r.s) as i32;
             let buf = (*ctx).text.add(r.s);
             *token_len = len;
