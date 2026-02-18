@@ -1,7 +1,7 @@
-FROM docker.io/postgres:16.9 AS build
-ARG RUST_VERSION=1.82.0
+FROM docker.io/postgres:17 AS build
+ARG RUST_VERSION=1.85.0
 RUN apt-get update; apt-get upgrade -y
-RUN apt-get install -y clang llvm-dev curl postgresql-server-dev-16
+RUN apt-get install -y clang llvm-dev curl postgresql-server-dev-17
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN rustup install $RUST_VERSION
@@ -14,7 +14,7 @@ COPY sql/ /work/sql
 WORKDIR /work
 RUN cargo build --release
 
-FROM docker.io/postgres:16.9
+FROM docker.io/postgres:17
 COPY --from=build /work/target/release/libchamkho_parser.so /usr/lib/postgresql/16/lib/chamkho_parser.so
 COPY --from=build /work/control/*.control /work/sql/*.sql /usr/share/postgresql/16/extension/
 COPY --from=build /work/data/chamkho_dict.txt /usr/share/postgresql/16/tsearch_data/

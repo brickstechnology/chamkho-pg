@@ -12,7 +12,8 @@ use regex::Regex;
 use std::os::raw::{c_char, c_int};
 use std::path::Path;
 use std::sync::atomic::{compiler_fence, Ordering};
-use wordcut_engine::{TextRange, Wordcut};
+use wordcut_engine::text_range::TextRange;
+use wordcut_engine::Wordcut;
 #[allow(non_upper_case_globals)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]

@@ -4,7 +4,7 @@ version = "0.3.0"
 authors = ["Vee Satayamas <vsatayamas@gmail.com>"]
 edition = "2021"
 build = "build.rs"
-rust-version = "1.77.2"
+rust-version = "1.85.0"
 description = "A PostgreSQL extension, which its objective is enabling PostgreSQL full-text searching on SE Asian languages"
 license = "GPLv2"
 
@@ -20,7 +20,7 @@ path = "src/bin.rs"
 
 [dependencies]
 lazy_static = "1.4.0"
-wordcut-engine = { git = "https://codeberg.org/mekong-lang/wordcut-engine.git" }
+wordcut-engine = { git = "https://codeberg.org/mekong-lang/wordcut-engine.git", tag = "v1.2.2" }
 regex = "1"
 cfg-if = "1.0.0"
 
