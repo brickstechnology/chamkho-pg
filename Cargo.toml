@@ -1,6 +1,6 @@
 [package]
 name = "chamkho-pg"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Vee Satayamas <vsatayamas@gmail.com>"]
 edition = "2021"
 build = "build.rs"
